@@ -1,21 +1,18 @@
-const http = require("http");
+const http = require('http'); 
+const fs = require("fs");
 
-const requestHandler = (request, response) => {
-    response.setHeader("Content-Type", "text/html; charset=utf-8;");
-   
-    if(request.url === "/home" || request.url === "/"){
-        response.write("<h2>Home</h2>");
- }
- else if(request.url == "/about"){
-        response.write("<h2>About</h2>");
- }
- else if(request.url == "/contact"){
-        response.write("<h2>Contacts</h2>");
- }
- else{
-      response.write("<h2>Not found</h2>");
- }
- response.end();
-};
+const hostname = '127.0.0.1'; 
+const port = 3000;
 
-http.createServer(requestHandler).listen(3000);
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  fs.writeFile("hello.txt", "Hello мир!", function(error){
+if(error) throw error; // если возникла ошибка
+console.log("Асинхронная запись файла завершена. Содержимое файла:");
+});
+let data = fs.readFileSync("hello.txt", "utf8");
+console.log(data); 
+});
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
